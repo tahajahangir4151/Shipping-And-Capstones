@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, ChangeEvent } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { useTranslation } from "react-i18next";
+import "../i18n";
+import LanguageSwitcher from "../components/LanguageSwitcher";
 
 interface Todo {
   id: number;
@@ -9,8 +11,9 @@ interface Todo {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     const stored = localStorage.getItem("todos");
@@ -23,58 +26,41 @@ export default function Home() {
 
   const addTodo = () => {
     if (!input.trim()) return;
-    try {
-      const newTodo: Todo = {
-        id: Date.now(),
-        text: input,
-        completed: false,
-      };
-      setTodos([...todos, newTodo]);
-      setInput("");
-    } catch (err) {
-      Sentry.captureException(err);
-    }
+    const newTodo: Todo = { id: Date.now(), text: input, completed: false };
+    setTodos([...todos, newTodo]);
+    setInput("");
   };
 
   const toggleTodo = (id: number) => {
-    try {
-      const newTodos = todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
-      setTodos(newTodos);
-    } catch (err) {
-      Sentry.captureException(err);
-    }
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(newTodos);
   };
 
   const deleteTodo = (id: number) => {
-    try {
-      const newTodos = todos.filter((todo) => todo.id !== id);
-      setTodos(newTodos);
-    } catch (err) {
-      Sentry.captureException(err);
-    }
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
   };
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setInput(e.target.value);
 
   return (
     <div style={{ padding: "2rem", maxWidth: "500px", margin: "auto" }}>
-      <h1>Todo App</h1>
+      <h1>{t("todoApp")}</h1>
+      <LanguageSwitcher />
       <input
         value={input}
-        onChange={handleInputChange}
-        placeholder="Enter todo"
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setInput(e.target.value)
+        }
+        placeholder={t("enterTodo")}
         style={{ padding: "0.5rem", width: "70%" }}
       />
       <button
         onClick={addTodo}
-        style={{ padding: "0.5rem", marginLeft: "0.5rem", cursor: "pointer" }}
+        style={{ padding: "0.5rem", marginLeft: "0.5rem" }}
       >
-        Add
+        {t("add")}
       </button>
-
       <ul>
         {todos.map((todo) => (
           <li key={todo.id} style={{ margin: "1rem 0" }}>
@@ -89,9 +75,9 @@ export default function Home() {
             </span>
             <button
               onClick={() => deleteTodo(todo.id)}
-              style={{ marginLeft: "1rem", cursor: "pointer" }}
+              style={{ marginLeft: "1rem" }}
             >
-              Delete
+              {t("delete")}
             </button>
           </li>
         ))}
