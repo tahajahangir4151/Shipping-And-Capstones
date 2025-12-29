@@ -3,6 +3,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import "../i18n";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import Counter from "@/components/Counter";
 
 interface Todo {
   id: number;
@@ -82,6 +83,7 @@ export default function Home() {
           </li>
         ))}
       </ul>
+      <Counter />
     </div>
   );
 }
