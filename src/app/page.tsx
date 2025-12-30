@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import "../i18n";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import Counter from "@/components/Counter";
+import Link from "next/link";
 
 interface Todo {
   id: number;
@@ -84,6 +85,22 @@ export default function Home() {
         ))}
       </ul>
       <Counter />
+
+      <Link href={"./login"}>
+        <button
+          style={{
+            border: "none",
+            width: "100px",
+            height: "40px",
+            backgroundColor: "blue",
+            borderRadius: "5px",
+            cursor: "pointer",
+            marginTop:"10px"
+          }}
+        >
+          Login
+        </button>
+      </Link>
     </div>
   );
 }
