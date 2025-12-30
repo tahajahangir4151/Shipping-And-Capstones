@@ -20,6 +20,6 @@ test("auth test", async () => {
   browser.close();
 });
 
-function createAuthHeader(username: any, password: any) {
+function createAuthHeader(username: string, password: string) {
   return `Basic ${btoa(`${username}:${password}`)}`;
 }
